@@ -94,17 +94,16 @@ app.all('*', function(req, res, next) {
 //code: 200 成功, 300 业务逻辑出错, 400 服务器内部有问题
 app.get("/",function(req,res){
 	current_time = req.query.current_time;
-	console.log("GET:当前时间："+current_time);
 	var room1_meeting = getAllRoomsCurrentMeetings().room1;
     res.send({code: 200,room_info:getAllRoomsInfo()});
 })
 
 app.post("/",function(req,res){
 	current_time = req.body.current_time;
-    console.log("POST:当前时间："+current_time+",请求开始时间:"+req.body.start_time+",结束时间:"+req.body.end_time);
 
     var req_start_time = req.body.start_time;
 	var req_end_time = req.body.end_time;
+	console.log('POST: 请求时间:'+req_start_time+'~'+req_end_time+',当前时间:'+current_time);
 
 	if(req_start_time && req_end_time){
 		if(1 == date_compare(req_start_time,current_time)){//TODO
@@ -122,7 +121,6 @@ app.post("/",function(req,res){
 	    	//否则，验证预定时间是否与已在队列中的预定会议时间冲突
 	    	for(var i = 0; i < other_meetings.length; i++){
 	    		var meeting = other_meetings[i];
-	    		console.log("ROOM1:队列中会议时间:"+meeting.start_time+"~"+meeting.end_time);
 	    		if((1 == date_compare(req_start_time,meeting.start_time) && 2 != date_compare(req_end_time,meeting.start_time))||1 != date_compare(req_start_time,meeting.end_time)){
 	    			
 	    		}else{
@@ -144,7 +142,6 @@ app.post("/",function(req,res){
 	    	//否则，验证预定时间是否与已在队列中的预定会议时间冲突
 	    	for(var i = 0; i < other_meetings.length; i++){
 	    		var meeting = other_meetings[i];
-	    		console.log("ROOM2:队列中会议时间:"+meeting.start_time+"~"+meeting.end_time);
 	    		if((1 == date_compare(req_start_time,meeting.start_time) && 2 != date_compare(req_end_time,meeting.start_time))||1 != date_compare(req_start_time,meeting.end_time)){
 	    			
 	    		}else{
